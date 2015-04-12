@@ -40,21 +40,21 @@ func main() {
 		fmt.Println("\nStarting on ", mybox, "verbose=", opt.Verbose)
 	}
 
-	dmidecode1 := dmidecode.DoListDmidecodedata(opt.Verbose)
+	dmidecode1 := dmidecode.Dmidecode(opt.Verbose)
 	hpmap := hp.Nil()
 	switch dmidecode1.Manufacturer_ {
 	case "HP":
-		hpmap = hp.DoListHpdata(opt.Verbose)
+		hpmap = hp.Hp(opt.Verbose)
 		hpstr = hpmap.SprintAll(mybox)
 	default:
 	}
 
-	dfmap := qsdf.DoListDfdata(false, opt.Verbose)
-	mdmap := md.DoListMddata(opt.Verbose)
-	partedmap := parted.DoListParteddata(opt.Verbose)
-	scsimap := scsi.DoListScsidata(opt.Verbose)
-	tgtdmap := tgtd.DoListTgtddata(opt.Verbose)
-	blkidmap := blkid.DoListBlkiddata(opt.Verbose)
+	dfmap := qsdf.Df(false, opt.Verbose)
+	mdmap := md.Md(opt.Verbose)
+	partedmap := parted.Parted(opt.Verbose)
+	scsimap := scsi.Scsi(opt.Verbose)
+	tgtdmap := tgtd.Tgtd(opt.Verbose)
+	blkidmap := blkid.Blkid(opt.Verbose)
 
 	if true {
 		ostr += fmt.Sprintf("box,%s,%s,%s,%s,%s,%s,%s,%s\n", dmidecode.Header(), qsdf.Header(), md.Header(), scsi.Header(), parted.Header(), smartctl.Header(), tgtd.Header(), blkid.Header())
@@ -124,7 +124,7 @@ func main() {
 					} else {
 						dfCount[df.Name_] = dfCount[df.Name_] + 1
 					}
-					smartctl := smartctl.DoListSmartctldataOne(df, scsi, parted, dmidecode1, hpmap, opt.Verbose)
+					smartctl := smartctl.SmartctlOne(df, scsi, parted, dmidecode1, hpmap, opt.Verbose)
 					if opt.Verbose {
 						ostr += "kk=" + kk + "/dfName=" + df.Name_ + "/dfDevname=" + df.DevName_
 						if parted == nil {
